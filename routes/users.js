@@ -1,8 +1,17 @@
 var express = require('express');
 var router = express.Router();
+const User = require('../models/User');
 
-router.get('/', (req, res, next) => {
-  res.send('respond with a resource');
+router.get('/dashboard/:userId', (req, res, next) => {
+  User.findById(req.params.userId)
+  .populate('tasks')
+  .populate('leisures')
+      .then((foundUser) => {
+        res.json(foundUser)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
 });
 
 module.exports = router;

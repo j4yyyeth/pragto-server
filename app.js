@@ -2,12 +2,13 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
+const createError = require('http-errors');
 var mongoose = require('mongoose');
 var cors = require('cors');
 
 var usersRouter = require('./routes/users');
 var authRouter = require('./routes/auth');
+var todoRouter = require('./routes/todo');
 
 var app = express();
 
@@ -28,6 +29,7 @@ app.use(
 
 app.use('/users', usersRouter);
 app.use('/auth', authRouter);
+app.use('/todo', todoRouter);
 
 app.use(function (req, res, next) {
     next(createError(404));

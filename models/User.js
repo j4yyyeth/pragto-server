@@ -14,7 +14,9 @@ const userSchema = new Schema (
         
         points: Number,
 
-        tasks: [{type: Schema.Types.ObjectId, ref: "Task"}]
+        tasks: [{type: Schema.Types.ObjectId, ref: "Task"}],
+        
+        leisures: [{type: Schema.Types.ObjectId, ref: "Leisure"}]
     },
       
       {

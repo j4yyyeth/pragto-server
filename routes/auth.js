@@ -7,7 +7,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const saltRounds = 10;
 
-const isAuthenticated = require('../middlware/isAuthenticated')
+const isAuthenticated = require('../middleware/isAuthenticated');
 
 
 router.post("/signup", (req, res, next) => {
@@ -15,10 +15,10 @@ router.post("/signup", (req, res, next) => {
     return res.status(400).json({ message: "please fill out all fields" });
   }
 
-  User.findOne({ username: req.body.username })
+  User.findOne({ email: req.body.email })
     .then((foundUser) => {
       if (foundUser) {
-        return res.status(400).json({ message: "Username is already taken" });
+        return res.status(400).json({ message: "Email is already taken" });
       } else {
         const salt = bcrypt.genSaltSync(saltRounds);
         const hashedPass = bcrypt.hashSync(req.body.password, salt);
@@ -67,7 +67,7 @@ router.post("/login", (req, res, next) => {
 
         const token = jwt.sign(payload, process.env.SECRET, {
           algorithm: "HS256",
-          expiresIn: "24hr",
+          expiresIn: "24hr", // expiration for signup/login session
         });
         res.json({ token: token, id: foundUser._id, message: `Welcome ${foundUser.email}` });
       } else {
