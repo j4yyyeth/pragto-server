@@ -2,16 +2,18 @@ var express = require('express');
 var router = express.Router();
 
 const Task = require('../models/Task');
+const User = require('../models/User');
 
 router.get('/', (req, res, next) => {
   Task.find()
+  .sort({createdAt: -1})
   .then(response => res.json(response))
   .catch(err => res.json(err));   
 });
 
 //
 
-router.post('/create', (req, res, next) => {
+router.post('/create/:userId', (req, res, next) => {
 
   let newTask = {
     task: req.body.task,
@@ -19,8 +21,18 @@ router.post('/create', (req, res, next) => {
   }
 
   Task.create(newTask)
-  .then(response => res.json(response))
-  .catch(err => res.json(err)); 
+  .then((createdTask) => {
+    User.findByIdAndUpdate(
+      req.params.userId,
+      { $push: { tasks: createdTask._id } },
+      { new: true }
+    ) 
+    console.log(newTask);
+  })
+  .then((updatedUser) => {
+    console.log(updatedUser);
+  })
+  .catch(err => res.json(err));
 });
 
 // 

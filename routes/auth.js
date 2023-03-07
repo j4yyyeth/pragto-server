@@ -80,7 +80,20 @@ router.post("/login", (req, res, next) => {
 });
 
 router.get("/verify", isAuthenticated, (req, res) => {
-  return res.status(200).json(req.user);
+User.findOne({_id: req.user._id})
+  .populate('tasks')
+  .populate('leisures')
+  .then((foundUser) => {
+
+    const payload = { ...foundUser };
+    delete payload._doc.password;
+
+    res.status(200).json(payload._doc);
+
+  })
+  .catch((err) => {
+    console.log(err)
+  })
 });
 
 
