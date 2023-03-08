@@ -10,7 +10,7 @@ const leisureSchema = new Schema (
         timeseries: true,
         timestamps: true
       }
-)
+    )
 
 const Leisure = model("Leisure", leisureSchema);
 

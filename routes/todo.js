@@ -15,8 +15,6 @@ router.get('/', (req, res, next) => {
 
 router.post('/create/:userId', (req, res, next) => {
 
-  // testing!
-
   let newTask = {
     task: req.body.task,
     reward: req.body.reward
@@ -24,17 +22,19 @@ router.post('/create/:userId', (req, res, next) => {
 
   Task.create(newTask)
   .then((createdTask) => {
-    User.findByIdAndUpdate(
+    return User.findByIdAndUpdate(
       req.params.userId,
       { $push: { tasks: createdTask._id } },
       { new: true }
-    ) 
-    console.log(newTask);
+    )
   })
   .then((updatedUser) => {
-    console.log(updatedUser);
+    const user = User.findById(updatedUser._id)
+    res.json(updatedUser);
+  })  
+  .catch((err) => {
+    console.log(err);
   })
-  .catch(err => res.json(err));
 });
 
 // 
