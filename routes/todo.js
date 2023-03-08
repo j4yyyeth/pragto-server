@@ -53,10 +53,10 @@ router.put('/update/:id', (req, res, next) => {
 router.get('/delete/:id', isAuthenticated, (req, res, next) => {
   console.log("this is the user", req.user)
     Task.findByIdAndRemove(req.params.id)
-      .then((removedTask) => {
+      .then(() => {
         return User.findByIdAndUpdate(req.user._id,{
           $pull: {
-            tasks: {_id: removedTask._id}
+            tasks: req.params.id
           }
         })
       })
