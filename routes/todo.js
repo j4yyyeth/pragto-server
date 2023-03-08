@@ -42,7 +42,6 @@ router.post('/create/:userId', (req, res, next) => {
 // 
 
 router.put('/update/:id', (req, res, next) => {
-  
     Task.findByIdAndUpdate(req.params.id, req.body, { new: true })
       .then((updatedTask) => res.json(updatedTask))
       .catch(error => res.json(error));   
