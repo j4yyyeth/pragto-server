@@ -23,10 +23,14 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(
-    cors({
-      origin: [process.env.FRONTEND_URI]  
-    })
+    cors()
   );
+
+  // app.use(
+  //   cors({
+  //     origin: [process.env.FRONTEND_URI]  
+  //   })
+  // );
 
 app.use('/users', usersRouter);
 app.use('/auth', authRouter);
