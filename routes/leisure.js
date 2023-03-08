@@ -38,20 +38,14 @@ router.get('/', (req, res, next) => {
     })
   });
   
-  // 
+  //
   
-//   router.put('/update/:id', (req, res, next) => {
-//       const { leisureId } = req.params;
-    
-//       if (!mongoose.Types.ObjectId.isValid(leisureId)) {
-//         res.status(400).json({ message: 'Specified id is not valid' });
-//         return;
-//       }
-    
-//       Leisure.findByIdAndUpdate(leisureId, req.body, { new: true })
-//         .then((updatedLeisure) => res.json(updatedLeisure))
-//         .catch(error => res.json(error));   
-//   });
+  router.put('/update/:id', (req, res, next) => {
+  
+    Leisure.findByIdAndUpdate(req.params.id, req.body, { new: true })
+      .then((updatedLeisure) => res.json(updatedLeisure))
+      .catch(error => res.json(error));   
+});
   
   // 
   

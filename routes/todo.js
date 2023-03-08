@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
+const isAuthenticated = require('../middleware/isAuthenticated');
+
 const Task = require('../models/Task');
 const User = require('../models/User');
 
@@ -39,24 +41,34 @@ router.post('/create/:userId', (req, res, next) => {
 
 // 
 
-// router.put('/update/:id', (req, res, next) => {
-//     const { taskId } = req.params;
+router.put('/update/:id', (req, res, next) => {
   
-//     if (!mongoose.Types.ObjectId.isValid(taskId)) {
-//       res.status(400).json({ message: 'Specified id is not valid' });
-//       return;
-//     }
-  
-//     Task.findByIdAndUpdate(taskId, req.body, { new: true })
-//       .then((updatedTask) => res.json(updatedTask))
-//       .catch(error => res.json(error));   
-// });
+    Task.findByIdAndUpdate(req.params.id, req.body, { new: true })
+      .then((updatedTask) => res.json(updatedTask))
+      .catch(error => res.json(error));   
+});
 
 // 
 
-router.get('/delete/:id', (req, res, next) => {
+router.get('/delete/:id', isAuthenticated, (req, res, next) => {
+  console.log("this is the user", req.user)
     Task.findByIdAndRemove(req.params.id)
-      .then((removedTask) => res.json({ message: `Task was removed successfully.`, removedTask }))
+      .then((removedTask) => {
+        return User.findByIdAndUpdate(req.user._id,{
+          $pull: {
+            tasks: {_id: removedTask._id}
+          }
+        })
+      })
+      .then((updatedUser) => {
+        return updatedUser.populate('tasks')
+      })
+      .then((populated) => {
+        return populated.populate('leisures')
+      })
+      .then((finalUser) => {
+        res.json(finalUser)
+      })
       .catch(error => res.json(error));   
 });
 
