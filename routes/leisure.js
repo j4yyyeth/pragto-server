@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
+const isAuthenticated = require('../middleware/isAuthenticated');
+
 const User = require('../models/User');
 const Leisure = require('../models/Leisure');
 
@@ -49,9 +51,25 @@ router.get('/', (req, res, next) => {
   
   // 
   
-  router.get('/delete/:id', (req, res, next) => {
+  router.get('/delete/:id', isAuthenticated, (req, res, next) => {
+    console.log("this is the user", req.user)
       Leisure.findByIdAndRemove(req.params.id)
-        .then((removedLeisure) => res.json({ message: `Leisure was removed successfully.`, removedLeisure }))
+        .then(() => {
+          return User.findByIdAndUpdate(req.user._id,{
+            $pull: {
+              leisures: req.params.id
+            }
+          })
+        })
+        .then((updatedUser) => {
+          return updatedUser.populate('leisures')
+        })
+        .then((populated) => {
+          return populated.populate('tasks')
+        })
+        .then((finalUser) => {
+          res.json(finalUser)
+        })
         .catch(error => res.json(error));   
   });
 
