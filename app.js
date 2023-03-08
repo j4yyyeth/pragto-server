@@ -9,6 +9,7 @@ var cors = require('cors');
 var usersRouter = require('./routes/users');
 var authRouter = require('./routes/auth');
 var todoRouter = require('./routes/todo');
+var leisureRouter = require('./routes/leisure');
 
 var app = express();
 
@@ -30,6 +31,7 @@ app.use(
 app.use('/users', usersRouter);
 app.use('/auth', authRouter);
 app.use('/todo', todoRouter);
+app.use('/leisure', leisureRouter);
 
 app.use(function (req, res, next) {
     next(createError(404));
