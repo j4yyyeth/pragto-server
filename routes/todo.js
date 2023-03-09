@@ -75,18 +75,18 @@ router.put('/update/:id', (req, res, next) => {
 
 //
 
-router.post('/done/:id/:userId', (req, res, next) => {
-  Task.findById(req.params.id)
-    .then((foundTask) => {
-      User.findByIdAndUpdate(
-        req.params.userId,
-        { points: User.points + foundTask.reward },
-      )
-      console.log(foundTask.reward);
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-})
+// router.post('/done/:id/:userId', (req, res, next) => {
+//   Task.findById(req.params.id)
+//     .then((foundTask) => {
+//       User.findByIdAndUpdate(
+//         req.params.userId,
+//         { points: User.points + foundTask.reward },
+//       )
+//       console.log(foundTask.reward);
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     })
+// })
 
 module.exports = router;
