@@ -31,23 +31,17 @@ router.post('/create/:userId', (req, res, next) => {
     )
   })
   .then((updatedUser) => {
-    const user = User.findById(updatedUser._id)
-    res.json(updatedUser);
+    return updatedUser.populate('tasks');
+  })
+  .then((finalUser) => {
+    res.json(finalUser);
   })  
   .catch((err) => {
     console.log(err);
   })
 });
 
-// 
-
-router.put('/update/:id', (req, res, next) => {
-    Task.findByIdAndUpdate(req.params.id, req.body, { new: true })
-      .then((updatedTask) => res.json(updatedTask))
-      .catch(error => res.json(error));   
-});
-
-// 
+//
 
 router.get('/delete/:id', isAuthenticated, (req, res, next) => {
   console.log("this is the user", req.user)
@@ -70,5 +64,29 @@ router.get('/delete/:id', isAuthenticated, (req, res, next) => {
       })
       .catch(error => res.json(error));   
 });
+
+// 
+
+router.put('/update/:id', (req, res, next) => {
+    Task.findByIdAndUpdate(req.params.id, req.body, { new: true })
+      .then((updatedTask) => res.json(updatedTask))
+      .catch(error => res.json(error));   
+});
+
+//
+
+router.post('/done/:id/:userId', (req, res, next) => {
+  Task.findById(req.params.id)
+    .then((foundTask) => {
+      User.findByIdAndUpdate(
+        req.params.userId,
+        { points: User.points + foundTask.reward },
+      )
+      console.log(foundTask.reward);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+})
 
 module.exports = router;

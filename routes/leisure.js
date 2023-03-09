@@ -73,6 +73,13 @@ router.get('/', (req, res, next) => {
         .catch(error => res.json(error));   
   });
 
+  //
 
+  router.post('/add/:id', (req, res, next) => {
+    Leisure.findById(req.params.id)
+      .then((foundLeisure) => {
+        console.log(foundLeisure);
+      })
+  })
 
 module.exports = router;
