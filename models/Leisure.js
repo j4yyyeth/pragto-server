@@ -3,7 +3,8 @@ const {Schema, model} = require('mongoose');
 const leisureSchema = new Schema (
     {
         leisure: String,
-        cost: Number
+        cost: Number,
+        added: {type: Boolean, default: false}
     },
       
       {
