@@ -25,7 +25,8 @@ router.post("/signup", (req, res, next) => {
 
         User.create({
           password: hashedPass,
-          email: req.body.email
+          email: req.body.email,
+          points: 0
         })
           .then((createdUser) => {
             const payload = { _id: createdUser._id, email: createdUser.email };

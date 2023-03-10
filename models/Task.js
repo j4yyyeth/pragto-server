@@ -3,7 +3,8 @@ const {Schema, model} = require('mongoose');
 const taskSchema = new Schema (
     {
         task: String,
-        reward: Number
+        reward: Number,
+        done: {type: Boolean, default: false}
     },
       
       {
