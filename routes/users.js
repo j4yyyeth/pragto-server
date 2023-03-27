@@ -47,7 +47,7 @@ router.put("/subtract/points/:id", async (req, res, next) => {
     const user = await User.findById(req.params.id);
     const leisure = await Leisure.findById(req.body.leisureId);
 
-    if (leisure.cost < user.points) {
+    if (leisure.cost <= user.points) {
       if (leisure.added === false) {
         const updatedUser = await User.findByIdAndUpdate(
           req.params.id,
